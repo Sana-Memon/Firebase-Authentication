@@ -1,21 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_authentication/add_product_admin.dart';
+import 'package:firebase_authentication/login_success.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-import 'login_success.dart';
+class AdminLogin extends StatelessWidget {
+  AdminLogin({super.key});
 
-class SignIn extends StatefulWidget {
-  SignIn({super.key});
-
-  @override
-  State<SignIn> createState() => _SignInState();
-}
-
-class _SignInState extends State<SignIn> {
   TextEditingController loginEmailController = TextEditingController();
   TextEditingController loginPasswordController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +35,7 @@ class _SignInState extends State<SignIn> {
             ElevatedButton(
               child: Text("Sign In"),
               onPressed: () async {
-                await SignInUser(
+                await SignInAdmin(
                     loginEmailController, loginPasswordController, context);
               },
             ),
@@ -50,27 +44,28 @@ class _SignInState extends State<SignIn> {
       ),
     );
   }
-}
 
-SignInUser(loginEmailController, loginPasswordController, context) async {
-  if (loginEmailController.text != "aaa@aaa.com") {
-    try {
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: loginEmailController.text,
-          password: loginPasswordController.text);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginSuccess()),
-      );
-      print("login Successful");
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+  SignInAdmin(loginEmailController, loginPasswordController, context) async {
+    if (loginEmailController.text == "aaa@aaa.com") {
+      try {
+        final credential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+                email: loginEmailController.text,
+                password: loginPasswordController.text);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const AddProductForAdmin()),
+        );
+        print("login Successful");
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          print('No user found for that email.');
+        } else if (e.code == 'wrong-password') {
+          print('Wrong password provided for that user.');
+        }
       }
+    } else {
+      print("you seems to be a user, not an admin");
     }
-  } else if (loginEmailController.text == "aaa@aaa.com") {
-    print("You are an admin");
   }
 }

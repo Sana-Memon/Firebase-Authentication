@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -13,6 +14,10 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+
+  TextEditingController userName = TextEditingController();
+  TextEditingController age = TextEditingController();
+  TextEditingController gender = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +40,31 @@ class _SignUpState extends State<SignUp> {
               ),
               obscureText: true,
             ),
+            TextFormField(
+              controller: userName,
+              decoration: const InputDecoration(
+                labelText: "Username",
+              ),
+            ),
+            TextFormField(
+              controller: age,
+              decoration: InputDecoration(
+                labelText: "Age",
+              ),
+              obscureText: true,
+            ),
+            TextFormField(
+              controller: gender,
+              decoration: const InputDecoration(
+                labelText: "gender",
+              ),
+            ),
             SizedBox(height: 20.0),
             ElevatedButton(
               child: Text("Signup"),
               onPressed: () async {
                 await RegisterUser();
+                AddUsers();
               },
             ),
           ],
@@ -64,5 +89,16 @@ class _SignUpState extends State<SignUp> {
     } catch (e) {
       print(e);
     }
+  }
+
+  AddUsers() async {
+    CollectionReference ref = FirebaseFirestore.instance.collection("Users");
+    await ref.add({
+      "Email": email.text,
+      "Password": password.text,
+      "UserName": userName.text,
+      "Age": age.text,
+      "Gender": gender.text
+    });
   }
 }

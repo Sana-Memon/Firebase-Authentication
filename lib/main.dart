@@ -1,6 +1,8 @@
+import 'package:firebase_authentication/choose_account.dart';
 import 'package:firebase_authentication/firebase_options.dart';
 import 'package:firebase_authentication/signin.dart';
 import 'package:firebase_authentication/signup.dart';
+import 'package:firebase_authentication/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SignIn(),
+      home: ChooseAccount(),
     );
   }
 }
